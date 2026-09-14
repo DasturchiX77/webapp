@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Valyuta kurslari</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Valyuta Bot</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -14,58 +19,121 @@
         body {
             margin: 0;
             padding: 20px;
+
             font-family: Arial, sans-serif;
+
             background: #f3f5f7;
-            color: #222;
+            color: #111;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: auto;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 8px;
-        }
 
-        .date {
+        /* HEADER */
+
+        .header {
             text-align: center;
-            color: #777;
             margin-bottom: 25px;
         }
 
-        .currency {
-            background: white;
-            padding: 18px;
-            margin-bottom: 12px;
-            border-radius: 16px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
         }
 
-        .left {
+        .date {
+            margin-top: 8px;
+            color: #777;
+            font-size: 16px;
+        }
+
+
+        /* NAVIGATION */
+
+        .menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .menu button {
+            flex: 1;
+
+            border: none;
+
+            padding: 15px;
+
+            border-radius: 14px;
+
+            background: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .menu button.active {
+            background: #111;
+            color: white;
+        }
+
+
+        /* PAGES */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+
+        /* CURRENCY CARD */
+
+        .currency {
+            background: white;
+
+            padding: 18px;
+
+            margin-bottom: 12px;
+
+            border-radius: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .currency-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .flag {
             font-size: 30px;
         }
 
-        .name {
-            font-size: 17px;
+        .currency-name {
+            font-size: 18px;
             font-weight: bold;
         }
 
-        .code {
+        .currency-code {
             color: #777;
-            font-size: 13px;
             margin-top: 4px;
         }
 
@@ -74,49 +142,344 @@
             font-weight: bold;
         }
 
+
+        /* CALCULATOR */
+
+        .calculator {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .calculator h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 12px;
+
+            font-size: 17px;
+
+            background: white;
+
+            margin-bottom: 15px;
+        }
+
+
+        .swap {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #111;
+            color: white;
+
+            font-size: 22px;
+
+            display: block;
+
+            margin: 0 auto 15px;
+
+            cursor: pointer;
+        }
+
+
+        .result {
+
+            margin-top: 20px;
+
+            padding: 20px;
+
+            background: #f3f5f7;
+
+            border-radius: 15px;
+
+            text-align: center;
+        }
+
+        .result-title {
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+
         .loading {
             text-align: center;
-            margin-top: 40px;
+            padding: 30px;
             color: #777;
         }
 
+
         .error {
-            background: #ffe5e5;
-            color: #c00;
+
             padding: 15px;
+
+            background: #ffe5e5;
+
+            color: #b00000;
+
             border-radius: 12px;
+
             text-align: center;
         }
+
+
+        @media (max-width: 400px) {
+
+            body {
+                padding: 14px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .currency {
+                padding: 15px;
+            }
+
+            .currency-name {
+                font-size: 16px;
+            }
+
+            .rate {
+                font-size: 16px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-    <h1>💱 Valyuta kurslari</h1>
 
-    <div class="date" id="date">
-        Yuklanmoqda...
-    </div>
+    <!-- HEADER -->
 
-    <div id="currencies">
+    <div class="header">
 
-        <div class="loading">
-            ⏳ Kurslar yuklanmoqda...
+        <h1>💱 Valyuta kurslari</h1>
+
+        <div
+            class="date"
+            id="date">
+
+            ⏳ Kurs yuklanmoqda...
+
         </div>
 
     </div>
+
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+        <button
+            id="ratesButton"
+            class="active">
+
+            💱 Kurslar
+
+        </button>
+
+
+        <button
+            id="calculatorButton">
+
+            🧮 Hisoblagich
+
+        </button>
+
+    </div>
+
+
+    <!-- ===================== -->
+    <!-- KURSLAR -->
+    <!-- ===================== -->
+
+    <div
+        id="ratesPage"
+        class="page active">
+
+        <div
+            id="currencies">
+
+            <div class="loading">
+
+                ⏳ Kurslar yuklanmoqda...
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================== -->
+    <!-- HISOBLAGICH -->
+    <!-- ===================== -->
+
+    <div
+        id="calculatorPage"
+        class="page">
+
+        <div class="calculator">
+
+            <h2>
+                🧮 Valyuta hisoblagich
+            </h2>
+
+
+            <!-- MIQDOR -->
+
+            <label for="amount">
+
+                Miqdor
+
+            </label>
+
+            <input
+                id="amount"
+                type="number"
+                value="100"
+                min="0"
+                step="any"
+                placeholder="Masalan: 1000">
+
+
+            <!-- DAN -->
+
+            <label for="fromCurrency">
+
+                Dan
+
+            </label>
+
+            <select id="fromCurrency">
+
+                <option value="UZS">
+
+                    🇺🇿 UZS — O'zbek so'mi
+
+                </option>
+
+            </select>
+
+
+            <!-- SWAP -->
+
+            <button
+                type="button"
+                class="swap"
+                id="swapButton">
+
+                ⇄
+
+            </button>
+
+
+            <!-- GA -->
+
+            <label for="toCurrency">
+
+                Ga
+
+            </label>
+
+            <select id="toCurrency">
+
+                <option value="USD">
+
+                    🇺🇸 USD — AQSH dollari
+
+                </option>
+
+            </select>
+
+
+            <!-- NATIJA -->
+
+            <div
+                class="result">
+
+                <div class="result-title">
+
+                    Natija
+
+                </div>
+
+                <div
+                    class="result-value"
+                    id="result">
+
+                    Hisoblanmoqda...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
 </div>
 
 
 <script>
 
+
+    /* =========================
+       API
+    ========================= */
+
     const API_URL =
         "https://cbu.uz/uz/arkhiv-kursov-valyut/json/";
 
-    const currencies = {
+
+    /* =========================
+       VALYUTALAR
+    ========================= */
+
+    const currencyInfo = {
+
         USD: {
             flag: "🇺🇸",
             name: "AQSH dollari"
@@ -146,108 +509,255 @@
             flag: "🇨🇳",
             name: "Xitoy yuani"
         }
+
     };
 
+
+    /* =========================
+       KURS DATA
+    ========================= */
+
+    let rates = {
+
+        UZS: 1
+
+    };
+
+
+    /* =========================
+       ELEMENTLAR
+    ========================= */
+
+    const ratesButton =
+        document.getElementById("ratesButton");
+
+    const calculatorButton =
+        document.getElementById("calculatorButton");
+
+    const ratesPage =
+        document.getElementById("ratesPage");
+
+    const calculatorPage =
+        document.getElementById("calculatorPage");
+
+    const currenciesContainer =
+        document.getElementById("currencies");
+
+    const dateElement =
+        document.getElementById("date");
+
+    const amountInput =
+        document.getElementById("amount");
+
+    const fromCurrency =
+        document.getElementById("fromCurrency");
+
+    const toCurrency =
+        document.getElementById("toCurrency");
+
+    const result =
+        document.getElementById("result");
+
+    const swapButton =
+        document.getElementById("swapButton");
+
+
+    /* =========================
+       SAHIFALAR
+    ========================= */
+
+    ratesButton.addEventListener(
+        "click",
+        function() {
+
+            ratesButton.classList.add("active");
+
+            calculatorButton.classList.remove("active");
+
+            ratesPage.classList.add("active");
+
+            calculatorPage.classList.remove("active");
+
+        }
+    );
+
+
+    calculatorButton.addEventListener(
+        "click",
+        function() {
+
+            calculatorButton.classList.add("active");
+
+            ratesButton.classList.remove("active");
+
+            calculatorPage.classList.add("active");
+
+            ratesPage.classList.remove("active");
+
+            calculate();
+
+        }
+    );
+
+
+    /* =========================
+       API DAN KURSLARNI OLISH
+    ========================= */
 
     async function getRates() {
 
         try {
 
-            const response = await fetch(API_URL);
+            const response =
+                await fetch(API_URL);
 
             if (!response.ok) {
-                throw new Error("API ishlamadi");
+
+                throw new Error(
+                    "API xatosi"
+                );
+
             }
 
-            const data = await response.json();
 
-            const container =
-                document.getElementById("currencies");
+            const data =
+                await response.json();
 
-            const dateElement =
-                document.getElementById("date");
 
-            container.innerHTML = "";
+            currenciesContainer.innerHTML =
+                "";
+
 
             let kursSana = "";
 
 
-            data.forEach(currency => {
+            data.forEach(
+                function(currency) {
 
-                const code = currency.Ccy;
+                    const code =
+                        currency.Ccy;
 
-                if (!currencies[code]) {
-                    return;
-                }
 
-                const info = currencies[code];
+                    if (
+                        !currencyInfo[code]
+                    ) {
 
-                const rate =
-                    Number(currency.Rate).toLocaleString(
-                        "uz-UZ",
-                        {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }
+                        return;
+
+                    }
+
+
+                    const rate =
+                        Number(currency.Rate);
+
+
+                    rates[code] =
+                        rate;
+
+
+                    kursSana =
+                        currency.Date;
+
+
+                    /* KURS KARTASI */
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "currency";
+
+
+                    card.innerHTML = `
+
+                        <div class="currency-left">
+
+                            <div class="flag">
+
+                                ${currencyInfo[code].flag}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="currency-name">
+
+                                    ${currencyInfo[code].name}
+
+                                </div>
+
+
+                                <div class="currency-code">
+
+                                    ${code}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rate">
+
+                            ${rate.toLocaleString(
+                                "uz-UZ",
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }
+                            )}
+
+                            so'm
+
+                        </div>
+
+                    `;
+
+
+                    currenciesContainer.appendChild(
+                        card
                     );
 
 
-                kursSana = currency.Date;
+                    /* SELECTLARGA QO'SHISH */
+
+                    addCurrencyOption(
+                        fromCurrency,
+                        code
+                    );
 
 
-                const card = document.createElement("div");
+                    addCurrencyOption(
+                        toCurrency,
+                        code
+                    );
 
-                card.className = "currency";
-
-
-                card.innerHTML = `
-                    
-                    <div class="left">
-
-                        <div class="flag">
-                            ${info.flag}
-                        </div>
-
-                        <div>
-
-                            <div class="name">
-                                ${info.name}
-                            </div>
-
-                            <div class="code">
-                                ${code}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="rate">
-                        ${rate} so'm
-                    </div>
-
-                `;
-
-
-                container.appendChild(card);
-
-            });
+                }
+            );
 
 
             dateElement.innerHTML =
-                "📅 Kurs sanasi: " + kursSana;
+                "📅 Kurs sanasi: " +
+                kursSana;
 
 
-        } catch (error) {
+            calculate();
+
+
+        }
+
+        catch(error) {
 
             console.error(error);
 
-            document.getElementById("currencies").innerHTML = `
+
+            currenciesContainer.innerHTML = `
 
                 <div class="error">
 
-                    ❌ Kurslarni yuklashda xatolik yuz berdi.
+                    ❌ Kurslarni yuklashda xatolik.
 
                     <br><br>
 
@@ -262,9 +772,217 @@
     }
 
 
+    /* =========================
+       SELECT OPTION
+    ========================= */
+
+    function addCurrencyOption(
+        select,
+        code
+    ) {
+
+        if (
+            select.querySelector(
+                `option[value="${code}"]`
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const option =
+            document.createElement("option");
+
+
+        option.value =
+            code;
+
+
+        option.textContent =
+            currencyInfo[code].flag +
+            " " +
+            code +
+            " — " +
+            currencyInfo[code].name;
+
+
+        select.appendChild(
+            option
+        );
+
+    }
+
+
+    /* =========================
+       HISOBLASH
+    ========================= */
+
+    function calculate() {
+
+        const amount =
+            Number(
+                amountInput.value
+            );
+
+
+        if (
+            !Number.isFinite(amount) ||
+            amount < 0
+        ) {
+
+            result.textContent =
+                "Miqdorni to'g'ri kiriting";
+
+            return;
+
+        }
+
+
+        const from =
+            fromCurrency.value;
+
+
+        const to =
+            toCurrency.value;
+
+
+        if (
+            rates[from] === undefined ||
+            rates[to] === undefined
+        ) {
+
+            result.textContent =
+                "Kurs yuklanmoqda...";
+
+            return;
+
+        }
+
+
+        /*
+            Barcha kurslar UZS bo'yicha.
+
+            Masalan:
+
+            USD = 11765.76 UZS
+
+            1 USD = 11765.76 UZS
+
+            Shuning uchun:
+
+            USD → UZS
+            amount × USD kursi
+
+            UZS → USD
+            amount ÷ USD kursi
+        */
+
+
+        const amountInUZS =
+            from === "UZS"
+                ? amount
+                : amount * rates[from];
+
+
+        const converted =
+            to === "UZS"
+                ? amountInUZS
+                : amountInUZS / rates[to];
+
+
+        result.textContent =
+            formatNumber(converted) +
+            " " +
+            to;
+
+    }
+
+
+    /* =========================
+       FORMAT
+    ========================= */
+
+    function formatNumber(number) {
+
+        if (
+            !Number.isFinite(number)
+        ) {
+
+            return "0";
+
+        }
+
+
+        return number.toLocaleString(
+            "uz-UZ",
+            {
+                maximumFractionDigits: 2
+            }
+        );
+
+    }
+
+
+    /* =========================
+       INPUT O'ZGARSA
+    ========================= */
+
+    amountInput.addEventListener(
+        "input",
+        calculate
+    );
+
+
+    fromCurrency.addEventListener(
+        "change",
+        calculate
+    );
+
+
+    toCurrency.addEventListener(
+        "change",
+        calculate
+    );
+
+
+    /* =========================
+       ALMASHTIRISH
+    ========================= */
+
+    swapButton.addEventListener(
+        "click",
+        function() {
+
+            const oldFrom =
+                fromCurrency.value;
+
+
+            fromCurrency.value =
+                toCurrency.value;
+
+
+            toCurrency.value =
+                oldFrom;
+
+
+            calculate();
+
+        }
+    );
+
+
+    /* =========================
+       ISHGA TUSHIRISH
+    ========================= */
+
     getRates();
+
 
 </script>
 
+
 </body>
+
 </html>
