@@ -7,11 +7,16 @@
     <title>Valyuta kurslari</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
             margin: 0;
             padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f3f5f7;
+            color: #222;
         }
 
         .container {
@@ -21,24 +26,66 @@
 
         h1 {
             text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .date {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
         }
 
         .currency {
             background: white;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 16px;
+
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
         }
 
-        .currency span {
-            font-size: 18px;
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .currency b {
+        .flag {
+            font-size: 30px;
+        }
+
+        .name {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .code {
+            color: #777;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .rate {
             font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #c00;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
         }
     </style>
 </head>
@@ -49,22 +96,175 @@
 
     <h1>💱 Valyuta kurslari</h1>
 
-    <div class="currency">
-        <span>🇺🇸 USD</span>
-        <b>12 500 so'm</b>
+    <div class="date" id="date">
+        Yuklanmoqda...
     </div>
 
-    <div class="currency">
-        <span>🇪🇺 EUR</span>
-        <b>14 600 so'm</b>
-    </div>
+    <div id="currencies">
 
-    <div class="currency">
-        <span>🇷🇺 RUB</span>
-        <b>145 so'm</b>
+        <div class="loading">
+            ⏳ Kurslar yuklanmoqda...
+        </div>
+
     </div>
 
 </div>
+
+
+<script>
+
+    const API_URL =
+        "https://cbu.uz/uz/arkhiv-kursov-valyut/json/";
+
+    const currencies = {
+        USD: {
+            flag: "🇺🇸",
+            name: "AQSH dollari"
+        },
+
+        EUR: {
+            flag: "🇪🇺",
+            name: "Yevro"
+        },
+
+        RUB: {
+            flag: "🇷🇺",
+            name: "Rossiya rubli"
+        },
+
+        GBP: {
+            flag: "🇬🇧",
+            name: "Angliya funti"
+        },
+
+        JPY: {
+            flag: "🇯🇵",
+            name: "Yaponiya iyenasi"
+        },
+
+        CNY: {
+            flag: "🇨🇳",
+            name: "Xitoy yuani"
+        }
+    };
+
+
+    async function getRates() {
+
+        try {
+
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error("API ishlamadi");
+            }
+
+            const data = await response.json();
+
+            const container =
+                document.getElementById("currencies");
+
+            const dateElement =
+                document.getElementById("date");
+
+            container.innerHTML = "";
+
+            let kursSana = "";
+
+
+            data.forEach(currency => {
+
+                const code = currency.Ccy;
+
+                if (!currencies[code]) {
+                    return;
+                }
+
+                const info = currencies[code];
+
+                const rate =
+                    Number(currency.Rate).toLocaleString(
+                        "uz-UZ",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+
+
+                kursSana = currency.Date;
+
+
+                const card = document.createElement("div");
+
+                card.className = "currency";
+
+
+                card.innerHTML = `
+                    
+                    <div class="left">
+
+                        <div class="flag">
+                            ${info.flag}
+                        </div>
+
+                        <div>
+
+                            <div class="name">
+                                ${info.name}
+                            </div>
+
+                            <div class="code">
+                                ${code}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="rate">
+                        ${rate} so'm
+                    </div>
+
+                `;
+
+
+                container.appendChild(card);
+
+            });
+
+
+            dateElement.innerHTML =
+                "📅 Kurs sanasi: " + kursSana;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById("currencies").innerHTML = `
+
+                <div class="error">
+
+                    ❌ Kurslarni yuklashda xatolik yuz berdi.
+
+                    <br><br>
+
+                    Internet aloqangizni tekshiring.
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    getRates();
+
+</script>
 
 </body>
 </html>
