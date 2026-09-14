@@ -1,21 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Valyuta kurslari</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .currency {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .currency span {
+            font-size: 18px;
+        }
+
+        .currency b {
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body>
 
+<div class="container">
+
     <h1>💱 Valyuta kurslari</h1>
 
-    <h2>USD</h2>
-    <p>12 500 so'm</p>
+    <div class="currency">
+        <span>🇺🇸 USD</span>
+        <b>12 500 so'm</b>
+    </div>
 
-    <h2>EUR</h2>
-    <p>14 600 so'm</p>
+    <div class="currency">
+        <span>🇪🇺 EUR</span>
+        <b>14 600 so'm</b>
+    </div>
+
+    <div class="currency">
+        <span>🇷🇺 RUB</span>
+        <b>145 so'm</b>
+    </div>
+
+</div>
 
 </body>
 </html>
